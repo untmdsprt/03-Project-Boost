@@ -13,17 +13,34 @@ public class Rocket : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
 		rigidBody = GetComponent<Rigidbody>();
         MyAudioSource = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
         Thrust();
         Rotate();
 	}
 
+    void OnCollisionEnter(Collision collision) 
+    {
+        switch (collision.gameObject.tag) 
+        {
+            case "Friendly":
+                // do nothing
+                print("OK"); // todo remove
+                break;
+
+            case "Dead":
+                print("Boom!");
+                // kill player
+                break;
+        }
+    }
     private void Thrust()
     {
         if (Input.GetKey(KeyCode.Space)) // can thrust while rotating
