@@ -1,2 +1,0 @@
-/Users/jadams/Online_courses/udemy/learn_to_code_making_games/unityv2/03-Project-Boost/obj/Debug/Assembly-CSharp.csprojResolveAssemblyReference.cache
-/Users/jadams/Online_courses/udemy/learn_to_code_making_games/unityv2/03-Project-Boost/obj/Debug/Assembly-CSharp.csproj.CoreCompileInputs.cache

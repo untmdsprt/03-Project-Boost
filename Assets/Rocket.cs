@@ -5,11 +5,16 @@ public class Rocket : MonoBehaviour {
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+
     [SerializeField] AudioClip mainEngine;
     [SerializeField] AudioClip success;
     [SerializeField] AudioClip death;
 
-	Rigidbody rigidBody;
+    [SerializeField] ParticleSystem mainEngineParticles;
+    [SerializeField] ParticleSystem successParticles;
+    [SerializeField] ParticleSystem deathParticles;
+
+    Rigidbody rigidBody;
     AudioSource audioSource;
 
     enum State { Alive, Dying, Transcending }
@@ -31,9 +36,8 @@ public class Rocket : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         if (state != State.Alive) { return; } // ignore collisions when dead
-        switch (collision.gameObject.tag) {
+        switch (collision.gameObject.tag)  {
             case "Friendly":
-                // do nothing
                 break;
             case "Finish":
                 StartSucessSequence();
@@ -48,6 +52,7 @@ public class Rocket : MonoBehaviour {
         state = State.Transcending;
         audioSource.Stop();
         audioSource.PlayOneShot(success);
+        successParticles.Play();
         Invoke("LoadNextLevel", 1f);
     }
 
@@ -55,6 +60,7 @@ public class Rocket : MonoBehaviour {
         state = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(death);
+        deathParticles.Play();
         Invoke("LoadFirstLevel", 1f);
     }
 
@@ -72,6 +78,7 @@ public class Rocket : MonoBehaviour {
         }
         else {
             audioSource.Stop();
+            mainEngineParticles.Stop();
         }
     }
 
@@ -80,6 +87,7 @@ public class Rocket : MonoBehaviour {
         if (!audioSource.isPlaying) {
             audioSource.PlayOneShot(mainEngine);
         }
+        mainEngineParticles.Play();
     }
 
     void RespondToRotateInput() {
@@ -89,11 +97,9 @@ public class Rocket : MonoBehaviour {
         if (Input.GetKey(KeyCode.A)) {
             transform.Rotate(Vector3.forward * rotationThisFrame);
         }
-
         else if (Input.GetKey(KeyCode.D)) {
             transform.Rotate(-Vector3.forward * rotationThisFrame);
         }
-
         rigidBody.freezeRotation = false; // resume physics control of rotation
     }
 }
